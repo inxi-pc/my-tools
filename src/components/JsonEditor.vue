@@ -4,13 +4,13 @@
         <div id="splitter">
             <div id="buttons">
                 <div>
-                    <button id="toTree" class="convert" title="Copy code to tree editor (Ctrl + >)">
-                        <div class="convert-right"></div>
+                    <button id="toTree" class="convert" title="Copy code to tree editor (Ctrl + >)" v-on:click="toTree">
+                        <div class="convert-right">></div>
                     </button>
                 </div>
                 <div>
-                    <button id="toCode" class="convert" title="Copy tree to code editor (Ctrl + <)">
-                        <div class="convert-left"></div>
+                    <button id="toCode" class="convert" title="Copy tree to code editor (Ctrl + <)" v-on:click="toCode">
+                        <div class="convert-left"><</div>
                     </button>
                 </div>
             </div>
@@ -22,25 +22,38 @@
 
 <script>
 import JSONEditor from 'jsoneditor/dist/jsoneditor.min.js'
+import $ from 'jquery'
 
 export default {
   name: 'JsonEditor',
+  data: function () {
+    return {
+      codeEditor: 0,
+      treeEditor: 0
+    }
+  },
   mounted: function () {
-    var editContainer = document.getElementById('codeEditor')
     var editOptions = {
       modes: ['text', 'code', 'tree', 'form', 'view'],
       mode: 'code',
       ace: ace
     }
-    new JSONEditor(editContainer, editOptions)
+    this.codeEditor = new JSONEditor($('#codeEditor').get(0), editOptions)
 
-    var treeContainer = document.getElementById('treeEditor')
     var treeOptions = {
       modes: ['text', 'code', 'tree', 'form', 'view'],
-      mode: 'code',
+      mode: 'tree',
       ace: ace
     }
-    new JSONEditor(treeContainer, treeOptions)
+    this.treeEditor = new JSONEditor($('#treeEditor').get(0), treeOptions)
+  },
+  methods: {
+    toTree: function (event) {
+      this.treeEditor.set(this.codeEditor.get())
+    },
+    toCode: function (event) {
+      this.codeEditor.set(this.treeEditor.get())
+    }
   }
 }
 </script>
@@ -48,7 +61,6 @@ export default {
 <style src="jsoneditor/dist/jsoneditor.min.css"></style>
 <style>
 #auto {
-  width: 100%;
   height: 100%;
   margin: -40px 0 -24px 0;
   padding: 40px 0 24px 0;
@@ -56,6 +68,7 @@ export default {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   overflow: hidden;
+  display: inline-block;
 }
 #codeEditor,
 #treeEditor {
@@ -105,12 +118,6 @@ div.convert-right {
   width: 24px;
   height: 24px;
   margin: 0;
-}
-div.convert-right {
-    background: url(/src/assets/jsoneditor-icons.svg) 0 -48px;
-}
-div.convert-left {
-    background: url(/src/assets/jsoneditor-icons.svg) -24px -48px;
 }
 #codeEditor {
   float: left;
