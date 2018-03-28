@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'Header',
   data () {
     return {
       msg: 'Welcome to Xiongbingchao\'s Vue.js App'

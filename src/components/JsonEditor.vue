@@ -24,6 +24,7 @@
 import JSONEditor from 'jsoneditor/dist/jsoneditor.min.js'
 import $ from 'jquery'
 
+/* eslint-disable */
 export default {
   name: 'JsonEditor',
   data: function () {
